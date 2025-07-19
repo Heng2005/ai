@@ -5,50 +5,78 @@
 ## 项目结构
 
 ```
-.
-├── dataset/                  # 存放下载的MNIST数据集
-├── models/                   # 存放训练好的模型
-├── handwritten_recognition.py # 主程序：数据处理、模型训练和评估
-├── predict.py                # 预测脚本：用于识别新的手写数字图像
-└── README.md                 # 项目说明文档
+├── main.py                    # 主程序 - 完整实验流程
+├── run_experiment.py          # 快速启动脚本 - 交互式菜单
+├── config.py                  # 配置文件 - 算法参数配置
+├── algorithm_manager.py       # 算法管理器 - 统一算法接口
+├── mnist_env.py              # MNIST环境适配器 - RL环境封装
+├── result_analyzer.py        # 结果分析器 - 可视化和报告生成
+├── handwritten_recognition.py # 原始CNN实现
+├── requirements.txt          # 依赖列表
+├── dataset/                  # 数据集目录
+├── models/                   # 模型保存目录
+├── results/                  # 结果输出目录
+└── logs/                     # 日志目录
 ```
 
-## 环境要求
-
-项目需要以下Python库：
-
-```
-torch>=1.7.0
-torchvision>=0.8.0
-numpy>=1.19.5
-matplotlib>=3.3.4
-pillow>=8.1.0
-```
-
-您可以使用以下命令安装所需依赖：
+## 安装依赖
 
 ```bash
-pip install torch torchvision numpy matplotlib pillow
+# 克隆项目
+git clone <repository-url>
+cd aifresh
+
+# 安装依赖
+pip install -r requirements.txt
 ```
+
+### 主要依赖
+
+- `torch>=2.0.0` - PyTorch深度学习框架
+- `stable-baselines3>=2.0.0` - 强化学习算法库
+- `wandb>=0.15.0` - 实验追踪工具
+- `matplotlib>=3.5.0` - 数据可视化
+- `scikit-learn>=1.1.0` - 机器学习工具
 
 ## 使用方法
 
-### 1. 训练模型
+### 方式1: 交互式启动 (推荐)
 
-运行主程序来下载MNIST数据集并训练模型：
+```bash
+python run_experiment.py
+```
+
+启动交互式菜单，可选择：
+1. 快速实验 (仅PyTorch CNN, 2-3分钟)
+2. 完整实验 (所有算法对比, 15-30分钟)
+3. 查看项目结构
+4. 安装依赖
+
+### 方式2: 命令行启动
+
+```bash
+# 快速实验
+python run_experiment.py quick
+
+# 完整实验
+python run_experiment.py full
+
+# 或直接运行主程序
+python main.py
+```
+
+### 方式3: 单独运行原始CNN
 
 ```bash
 python handwritten_recognition.py
 ```
 
-这将会：
-- 下载MNIST数据集并保存到本地`dataset`目录
-- 创建并训练CNN模型
-- 在测试集上评估模型性能
-- 保存训练好的模型到`models`目录
-- 生成训练历史图表和预测结果图表
+## 算法说明
 
-### 2. 预测新图像
+### 1. PyTorch CNN
+- **类型**: 深度学习卷积神经网络
+- **结构**: 3层卷积 + 2层全连接
+- **特点**: 直接监督学习，适合图像分类
 
 训练完成后，您可以使用`predict.py`脚本来识别新的手写数字图像：
 
