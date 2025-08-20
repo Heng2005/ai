@@ -16,6 +16,13 @@ from result_analyzer import ResultAnalyzer
 from handwritten_recognition import load_mnist_data
 from sklearn.model_selection import train_test_split
 
+# 导入强化学习模块（如果可用）
+try:
+    from rl_experiment import interactive_rl_menu
+    RL_AVAILABLE = True
+except ImportError:
+    RL_AVAILABLE = False
+
 
 def quick_experiment():
     """快速实验 - 只运行PyTorch CNN进行基础测试"""
@@ -93,12 +100,13 @@ def interactive_menu():
         print("请选择运行模式:")
         print("1. 快速实验 (仅PyTorch CNN, 约2-3分钟)")
         print("2. 完整实验 (所有算法对比, 约15-30分钟)")
-        print("3. 查看项目结构")
-        print("4. 安装依赖")
-        print("5. 退出")
+        print("3. 强化学习可视化实验")
+        print("4. 查看项目结构")
+        print("5. 安装依赖")
+        print("6. 退出")
         print("="*60)
         
-        choice = input("请输入选择 (1-5): ").strip()
+        choice = input("请输入选择 (1-6): ").strip()
         
         if choice == '1':
             try:
@@ -115,12 +123,21 @@ def interactive_menu():
                 print(f"实验失败: {e}")
                 
         elif choice == '3':
+            if RL_AVAILABLE:
+                try:
+                    interactive_rl_menu()
+                except Exception as e:
+                    print(f"强化学习实验失败: {e}")
+            else:
+                print("强化学习模块不可用。请确保已安装所有依赖。")
+                
+        elif choice == '4':
             show_project_structure()
             
-        elif choice == '4':
+        elif choice == '5':
             install_dependencies()
             
-        elif choice == '5':
+        elif choice == '6':
             print("退出程序")
             break
             
@@ -134,6 +151,8 @@ def show_project_structure():
     print("="*40)
     print("├── main.py                    # 主程序")
     print("├── run_experiment.py          # 快速启动脚本")
+    print("├── rl_experiment.py           # 强化学习实验脚本")
+    print("├── rl_visualizer.py           # 强化学习可视化器")
     print("├── config.py                  # 配置文件")
     print("├── algorithm_manager.py       # 算法管理器")
     print("├── mnist_env.py              # MNIST环境适配器")
@@ -149,9 +168,11 @@ def show_project_structure():
     print("\n核心功能:")
     print("- PyTorch CNN: 深度学习卷积神经网络")
     print("- Stable Baselines3: 强化学习算法 (PPO, A2C, DQN)")
+    print("- Gymnasium: 强化学习环境")
     print("- WandB集成: 实验追踪和可视化")
     print("- 统一评估: 准确率、训练时间、推理时间对比")
     print("- 结果分析: 自动生成报告和图表")
+    print("- 强化学习可视化: 多种环境和算法的训练过程可视化")
 
 
 def install_dependencies():
@@ -162,9 +183,12 @@ def install_dependencies():
     print("\n主要依赖包括:")
     print("- torch, torchvision: PyTorch深度学习框架")
     print("- stable-baselines3: 强化学习算法库")
+    print("- gymnasium: 强化学习环境库")
     print("- wandb: 实验追踪工具")
     print("- matplotlib, seaborn: 数据可视化")
     print("- scikit-learn: 机器学习工具")
+    print("- pandas: 数据处理")
+    print("- tqdm: 进度条")
 
 
 if __name__ == "__main__":
